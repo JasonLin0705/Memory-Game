@@ -1,3 +1,4 @@
+#Imports pygame and all other libraries used in this program
 import random, pygame, sys
 from pygame.locals import *
 
@@ -16,7 +17,7 @@ assert (boardWidth * boardHeight) % 2 == 0, 'Board needs to have an even number 
 xMargin = int((windowWidth - (boardWidth * (boxSize + gapSize))) / 2)
 yMargin = int((windowHeight - (boardHeight * (boxSize + gapSize))) / 2)
 
-##colors used in the program
+##colors used in the program, used the RGB colors and indexes to find the right tint
 gray     = (100, 100, 100)
 darkBlue = (60, 60, 100)
 white    = (255, 255, 255)
@@ -75,28 +76,28 @@ def main():
         displaySurface.fill(backgroundC) # draws the window
  
 
-        draw_board(mainBoard, revealedBoxes)
+        draw_board(mainBoard, revealedBoxes) #Creates a board with the width and length set previously
         for event in pygame.event.get(): # event handling loop
-            if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
+            if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE): 
                 pygame.quit()
 
                 sys.exit()
             
 
 
-            elif event.type == MOUSEMOTION:
+            elif event.type == MOUSEMOTION: #Searches for the mouse position
 
                 mousex, mousey = event.pos
 
-            elif event.type == MOUSEBUTTONUP:
+            elif event.type == MOUSEBUTTONUP: #Click input
 
                 mousex, mousey = event.pos
                 mouseClicked = True
         
-        boxx, boxy = get_box(mousex, mousey)
+        boxx, boxy = get_box(mousex, mousey) #Creates many animations when boxes are hovered upon or clicked
         if boxx != None and boxy != None:
             if not revealedBoxes[boxx][boxy]:
-                draw_highlight_box(boxx, boxy)
+                draw_highlight_box(boxx, boxy) #Highlights box using a function created later
             if not revealedBoxes[boxx][boxy] and mouseClicked:
                 reveal_box_animation(mainBoard, [(boxx, boxy)])
                 revealedBoxes[boxx][boxy] = True # set the box as "revealed"
@@ -106,13 +107,13 @@ def main():
                     icon1shape, icon1color = get_shape(mainBoard, firstSelection[0], firstSelection[1])
                     icon2shape, icon2color = get_shape(mainBoard, boxx, boxy)
                     #shows the current icon that's being selected and compares
-                    if icon1shape != icon2shape or icon1color != icon2color:
+                    if icon1shape != icon2shape or icon1color != icon2color: #Statement that turns back the cards because they don't match
                         pygame.time.wait(1000) # 1000 milliseconds = 1 sec
                         cover_boxes_animation(mainBoard, [(firstSelection[0], firstSelection[1]), (boxx, boxy)])
                         revealedBoxes[firstSelection[0]][firstSelection [1]] = False
                         revealedBoxes[boxx][boxy] = False
                     elif has_won(revealedBoxes): # check if all pairs found
-                        win_game(mainBoard)
+                        win_game(mainBoard) 
                         pygame.time.wait(2000)
                         mainBoard = get_randomized_board()
                         revealedBoxes = generate_reveal_boxes_data(False)
@@ -123,7 +124,7 @@ def main():
                     firstSelection = None # reset firstSelection variable
          # Redraw the screen and wait a clock tick.
         pygame.display.update()
-        FPSClock.tick(FPS)
+        FPSClock.tick(FPS) #FPS set
 
 
 
